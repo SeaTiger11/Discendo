@@ -13,7 +13,7 @@ body {
     font-size: 30px;
     position: sticky;
     top: 0;
-    height: 100px;
+    height: 10vh;
     box-shadow: 0px 2px 5px black;
 }
 
@@ -67,17 +67,47 @@ body {
     padding: 5px;
     margin: 10px;
     cursor: pointer;
+    border: solid;
+}
+
+.question {
+    font-size: 5vh;
+    width: 40vw;
+    height: 7vh;
+    line-height: 7vh;
+    margin: 3vh;
+}
+
+.quizButton {
+    width: 10vw;
+    height: 3.5vh;
+    line-height: 3.5vh;
+}
+
+.pageSelectors {
+    width: 3.5vh;
+    height: 3.5vh;
+    line-height: 3.5vh;
+}
+
+.verticalCenter {
+    display: flex;
+    align-items: center;
+    height: 85vh;
 }
 
 .optionWrapper {
     text-align: center;
-    width: 30vw;
+    width: 50vw;
     margin:auto;
 }
 
 input[type=radio] {
-    border: 0px;
-    height: 2em;
+    display: none;
+}
+
+.text:has(input[type=radio]:checked) {
+    background-color: #D7D7D7;
 }
 
 </style>
@@ -86,7 +116,7 @@ input[type=radio] {
     <body>
         <div class="header">
             <div class="wrapper" style="left: 20px"><img class="logo" src="images/DiscendoLogoGrey.png"></div>
-            <div class="wrapper" style="right: 20px"><button class="button button1" onclick='window.location.href = "index.php"'>Return Home</button></div>
+            <div class="wrapper" style="right: 20px"><button class="button button1" onclick='window.location.href = "index.html"'>Return Home</button></div>
         </div>
     </body>
 </html>
@@ -109,10 +139,8 @@ input[type=radio] {
     $result = $conn->query($sql);
     $count = ($result->fetch_assoc())["COUNT(id)"];
 
-    echo $_COOKIE['Question'];
-
     if ($_COOKIE['Question'] >= $count) {
-        echo "END OF QUIZ";
+        header( "Location: http://error404.42web.io/" );
     }
 
     else {
@@ -133,19 +161,18 @@ input[type=radio] {
         $option3 = $row["option_3"];
         $option4 = $row["option_4"];
 
-        echo '<h1>'.$question.'</h1>';
+        $optionElements = '<div class="text question">'.$question.'</div>';
 
         $options = array($optioncorrect,$option2,$option3,$option4);
         shuffle($options);
 
-        $optionElements = "";
-
+        $optionCount = 0;
         foreach ($options as $value) {
             if ($value == $optioncorrect) {
-                $optionElements .= "<div class='text'><input type='radio' name ='option' id='correct'>$value</div>";
+                $optionElements .= "<label for='correct' class='text'><input type='radio' name ='option' id='correct'>$value</label>";
             }
             else {
-                $optionElements .= "<div class='text'><input type='radio' name='option'>$value</div>";
+                $optionElements .= "<label for='wrong".$optionCount."' class='text'><input type='radio' name='option' id='wrong".$optionCount++."'>$value</label>";
             }
         }
     }
@@ -155,52 +182,32 @@ input[type=radio] {
 
 <html>
     <body>
+        <div class="verticalCenter">
         <div class="optionWrapper">
             <form action="">
             <?php echo $optionElements ?>
             </form>
 
-            <br><button id="submit">Verify</button>
-            <button id="clear">Clear</button>
-            <h4 id="message"> </h4>  
-            <br><br>
-            <a href="index.php">Go to index</a>
-            <a onclick="IncrementQuestion(1)" href="#">Next question</a>
+            <br>
+            <div class="text quizButton" onclick="Reveal()">Reveal</div>
+            <div class="text quizButton" onclick="Clear()">Clear</div>
+            <br>
+            <div class="text pageSelectors" onclick="IncrementQuestion(-1)"><</div>
+            <div class="text pageSelectors"><?php echo $_COOKIE['Question'] ?></div>
+            <div class="text pageSelectors" onclick="IncrementQuestion(1)">></div>
+        </div>
         </div>
     </body>
 </html>
 
 <script>
-    let submit_btn = document.querySelector('#submit');
-    let clear_btn = document.querySelector('#clear');
-    let msg = document.getElementById("message")
-
-    submit_btn.addEventListener('click',checkButton);
-    clear_btn.addEventListener('click',clear);
-
-    function checkButton() {    
-        var getSelectedValue = document.querySelector(   
-            'input[name="option"]:checked');   
-            
-    
-        if (getSelectedValue == null){   
-            msg.style.color = "red";
-            msg.innerHTML = "You have not selected any option"; 
-        }   
-        else if (getSelectedValue.id == "correct"){
-            msg.style.color = "green";
-            msg.innerHTML = "Correct Answer!";
-        }
-        else{
-            msg.style.color = "red";
-            msg.innerHTML = "Incorrect Answer!";
-        }
-        
+    function Reveal() {
+        document.getElementById("correct").parentElement.style.backgroundColor = "#DEF9C4";
     }
 
-    function clear() {
-        var getSelectedValue = document.querySelector('input[name="option"]:checked');
-        getSelectedValue.checked = false;
+    function Clear() {
+        document.querySelector('input[name="option"]:checked').checked = false;
+        document.getElementById("correct").parentElement.style.backgroundColor = "#FFFFFF";
     }
 
     function IncrementQuestion(amount) {

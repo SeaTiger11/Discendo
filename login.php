@@ -12,7 +12,7 @@ body {
     font-size: 30px;
     position: sticky;
     top: 0;
-    height: 100px;
+    height: 10vh;
     box-shadow: 0px 2px 5px black;
 }
 
@@ -114,7 +114,7 @@ img {
         d.setTime(d.getTime() + (24*60*60*1000)); //Set to expire in 1 day
         let expires = "expires="+ d.toUTCString();
         document.cookie = "Email=" + email + ";" + expires + ";";
-        document.location.href = "index.php";
+        document.location.href = "index.html";
     }
 </script>
 
@@ -157,7 +157,7 @@ img {
     <body>
         <div class="header">
             <div class="wrapper" style="left: 20px"><img class="logo" src="images/DiscendoLogoGrey.png"></div>
-            <div class="wrapper" style="right: 20px"><button class="button button1" onclick='window.location.href = "index.php"'>Return Home</button></div>
+            <div class="wrapper" style="right: 20px"><button class="button button1" onclick='window.location.href = "index.html"'>Return Home</button></div>
         </div>
 
         <div class="formWrapper">

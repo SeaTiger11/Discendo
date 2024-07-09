@@ -24,45 +24,27 @@ body {
     transform: translateY(-50%);
 }
 
-nav ul {
-    margin:auto;
-    height:80%; 
-    width:70%;
-    overflow:hidden; 
-    overflow-y:scroll;
-    text-align: center;
-}
-
-::-webkit-scrollbar {
-    width: 0;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
-}
-/* Optional: show position indicator in red */
-::-webkit-scrollbar-thumb {
-    background: #FF0000;
-}
-
 .button {
     border: none;
     color: white;
+    padding: 16px 32px;
     text-align: center;
     text-decoration: none;
     font-size: 16px;
+    margin: 4px 2px;
     transition-duration: 0.4s;
     cursor: pointer;
     vertical-align: middle;
     border-radius: 12px;
-    background-color: #000000; 
-    color: white;
-    margin: 4px 2px;
-}
-
-.button:hover {
-    background-color: #525252;
 }
 
 .button1 {
-    padding: 16px 32px;
+    background-color: #000000; 
+    color: white;
+}
+
+.button1:hover {
+    background-color: #525252;
 }
 
 .logo {
@@ -71,27 +53,50 @@ nav ul {
     width: 300px;
 }
 
+.verticalCenter {
+    display: flex;
+    align-items: center;
+    height: 50vh;
+}
+
+.horizontalCenter {
+    text-align: center;
+    width: 20vw;
+    margin: auto;
+}
+
 .text {
     -webkit-border-radius: 20px;
     display: inline-block;
     vertical-align: middle;
-    width: 500px;
+    width: 20vw;
+    height: 5vh;
     text-align: center;
+    line-height: 5vh;
+    font-size: 3vh;
     background-color: #FFFFFF;
     padding: 5px;
     margin: 10px;
-    cursor: pointer;
     border: solid;
+    box-sizing: content-box;
 }
 
-.button2 {
-    display: inline-block;
-    padding: 8px 16px;
+.inputField {
+    width: 15vw;
+    height: 3vh;
+    line-height: 3vh;
 }
 
+.createButton {
+    width: 6vw;
+    height: 3.5vh;
+    line-height: 3.5vh;
+    cursor: pointer;
+}
 </style>
 
-<?php
+<?php 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dmServername = "sql202.infinityfree.com";
     $dbUsername = "if0_36807122";
     $dbPassword = "rpag0005";
@@ -104,22 +109,36 @@ nav ul {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $check = "SELECT * FROM quizzes";
-    
-    $result = $conn->query($check);
+    $name = $_POST['name'];
 
-    $quizzes = "";
-    if ($result->num_rows > 0) {
-        // output data of each row
-        while($row = $result->fetch_assoc()) {
-            $quizzes .= '<div class="text" onclick="document.cookie = \'Quiz='.$row["name"].$row["id"].'\'; document.cookie = \'Question=0\'; window.location.href = \'quiz.php\';">Likes: '.$row["likes"].'<br>'.$row["name"].'</div>';
-        }
+    $sql = "INSERT INTO quizzes
+        VALUES (null,'$name','0')";
+
+    $conn->query($sql);
+
+    $sql_2 = "SELECT id FROM quizzes ORDER BY ID DESC LIMIT 1";
+    $result = $conn->query($sql_2);
+    
+    $row = $result->fetch_assoc();
+    $id = $row["id"];
+
+    $sql_3 = "CREATE TABLE ".$name.$id."(id INT AUTO_INCREMENT,
+    question VARCHAR(200) NOT NULL,  
+    option_correct VARCHAR(50) NOT NULL, option_2 VARCHAR(50) NOT NULL,
+    option_3 VARCHAR(50) NOT NULL,
+    option_4 VARCHAR(50) NOT NULL,
+    primary key (id))";  
+    
+    if (!mysqli_query($conn, $sql_3)) {
+        die("Could not create table: ". mysqli_error($conn));  
     }
-    else {
-        echo "0 results";
-    }
+
+    setcookie("quiz", $name.$id);
 
     $conn->close();
+
+    header('Location: http://error404.42web.io/questionMaker.php');
+}
 ?>
 
 <html>
@@ -128,11 +147,15 @@ nav ul {
             <div class="wrapper" style="left: 20px"><img class="logo" src="images/DiscendoLogoGrey.png"></div>
             <div class="wrapper" style="right: 20px"><button class="button button1" onclick='window.location.href = "index.html"'>Return Home</button></div>
         </div>
+
+        <div class="verticalCenter"><div class="horizontalCenter">
+        <form method="post" action="create.php">
+            <div class="text">Name your new quiz:</div>
+            <input class="text inputField" type="text" name="name" placeholder="Name">
+                
         
-        <nav>
-            <ul>
-                <?php echo $quizzes; ?>
-            </ul>
-        </nav>
+            <input class="text createButton" type='submit' name='submit' value="Create">
+        </form>
+        </div></div>
     </body>
 </html>

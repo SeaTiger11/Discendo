@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sql202.byetcluster.com
--- Generation Time: Jul 09, 2024 at 01:50 AM
+-- Generation Time: Jul 09, 2024 at 09:13 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.2.22
 
@@ -21,6 +21,21 @@ SET time_zone = "+00:00";
 --
 -- Database: `if0_36807122_quizzes`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `a54`
+--
+
+CREATE TABLE `a54` (
+  `id` int(11) NOT NULL,
+  `question` varchar(200) NOT NULL,
+  `option_correct` varchar(50) NOT NULL,
+  `option_2` varchar(50) NOT NULL,
+  `option_3` varchar(50) NOT NULL,
+  `option_4` varchar(50) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -96,6 +111,21 @@ INSERT INTO `Geography38` (`id`, `question`, `option_correct`, `option_2`, `opti
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `Hackathon53`
+--
+
+CREATE TABLE `Hackathon53` (
+  `id` int(11) NOT NULL,
+  `question` varchar(200) NOT NULL,
+  `option_correct` varchar(50) NOT NULL,
+  `option_2` varchar(50) NOT NULL,
+  `option_3` varchar(50) NOT NULL,
+  `option_4` varchar(50) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `questionwithnospaces40`
 --
 
@@ -133,14 +163,21 @@ CREATE TABLE `quizzes` (
 
 INSERT INTO `quizzes` (`id`, `name`, `likes`) VALUES
 (40, 'questionwithnospaces', 0),
-(39, 'mathy math', 0),
+(53, 'Hackathon', 0),
 (38, 'Geography', 0),
 (37, 'Biology', 0),
-(36, 'DiscreteMaths', 0);
+(36, 'DiscreteMaths', 0),
+(54, 'a', 0);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `a54`
+--
+ALTER TABLE `a54`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `Biology37`
@@ -161,6 +198,12 @@ ALTER TABLE `Geography38`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `Hackathon53`
+--
+ALTER TABLE `Hackathon53`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `questionwithnospaces40`
 --
 ALTER TABLE `questionwithnospaces40`
@@ -175,6 +218,12 @@ ALTER TABLE `quizzes`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `a54`
+--
+ALTER TABLE `a54`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `Biology37`
@@ -195,6 +244,12 @@ ALTER TABLE `Geography38`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `Hackathon53`
+--
+ALTER TABLE `Hackathon53`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `questionwithnospaces40`
 --
 ALTER TABLE `questionwithnospaces40`
@@ -204,7 +259,7 @@ ALTER TABLE `questionwithnospaces40`
 -- AUTO_INCREMENT for table `quizzes`
 --
 ALTER TABLE `quizzes`
-  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
