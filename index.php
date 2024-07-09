@@ -1,0 +1,124 @@
+<style>
+body {
+    background: #000000;
+    font-family: Arial;
+    margin: 0;
+}
+
+.header {
+    padding: 10px;
+    background: #D2D2CF;
+    color: black;
+    font-size: 30px;
+    position: sticky;
+    top: 0;
+    height: 100px;
+    box-shadow: 0px 2px 5px black;
+}
+
+.wrapper {
+    line-height: 15px;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.button {
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    vertical-align: middle;
+    border-radius: 12px;
+}
+
+.button1 {
+    background-color: #000000; 
+    color: white;
+}
+
+.button1:hover {
+    background-color: #525252;
+}
+
+.logo {
+    display: inline-block;
+    vertical-align: middle;
+    width: 300px;
+}
+
+.moto {
+    display: block;
+    width: 100vw;
+    height: 50vh;
+    object-fit: cover;
+}
+
+.option {
+    display: block;
+    width: 100vw;
+    height: 30vh;
+    object-fit: cover;
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+</style>
+
+<html>
+    <body>
+        <div class="header">
+            <div class="wrapper" style="left: 20px"><img class="logo" src="images/DiscendoLogoGrey.png"></div>
+            <div class="wrapper" style="right: 20px"><button class="button button1" onclick='window.location.href = "login.php"' id="accountButton">Log In</button></div>
+        </div>
+
+        <img class="moto" src="images/MotoV3.png">
+        <img class="option" src="images/Discover.png" onclick='window.location.href = "discover.php"'>
+        <img class="option" src="images/Create.png" onclick='window.location.href = "create.php"'>
+    </body>
+</html>
+
+<script>
+    let name = "Email=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            LogIn(c.substring(name.length, c.length));
+            break;
+        }
+    }
+
+    function LogIn(email) {
+        const d = new Date();
+        d.setTime(d.getTime() + (24*60*60*1000)); //Set to expire in 1 day
+        let expires = "expires="+ d.toUTCString();
+        document.cookie = "Email=" + email + ";" + expires + ";";
+        
+        const accountButton = document.getElementById("accountButton");
+        accountButton.innerHTML = email;
+        accountButton.onclick = function() {LogOut()};
+    }
+
+    function LogOut() {
+        const d = new Date();
+        d.setTime(d.getTime() - 1);
+        let expires = "expires="+ d.toUTCString();
+        document.cookie = "Email=" + "" + ";" + expires + ";";
+        location.reload();
+    }
+</script>
